@@ -1,16 +1,22 @@
 package com.kshop.backend.config;
 import com.kshop.backend.entity.Product;
+
+
 import com.kshop.backend.repository.ProductRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+
 import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
     private final ProductRepository productRepository;
+    
     @Override
     public void run(String... args) {
         initializeProducts();
+        
     }
     private void initializeProducts() {
         if (productRepository.count() == 0) {
@@ -56,4 +62,5 @@ public class DataInitializer implements CommandLineRunner {
             productRepository.save(product4);
         }
     }
+    
 }
