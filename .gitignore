@@ -20,7 +20,7 @@ Thumbs.db
 # Logs
 *.log
 # Application properties (민감 정보 포함!)
-application.properties
+# application.properties - Railway에서 환경 변수 사용하므로 포함
 application-prod.properties
 # Backup files
 *~
