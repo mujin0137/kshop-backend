@@ -1,13 +1,14 @@
 package com.kshop.backend.config;
+
 import com.kshop.backend.entity.Product;
-
-
 import com.kshop.backend.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-
 import org.springframework.stereotype.Component;
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
@@ -15,11 +16,23 @@ public class DataInitializer implements CommandLineRunner {
     
     @Override
     public void run(String... args) {
-        initializeProducts();
-        
+        try {
+            log.info("데이터 초기화 시작...");
+            initializeProducts();
+            log.info("데이터 초기화 완료!");
+        } catch (Exception e) {
+            log.error("데이터 초기화 중 오류 발생: {}", e.getMessage());
+            log.warn("애플리케이션은 계속 실행됩니다. 데이터베이스 연결을 확인하세요.");
+        }
     }
+    
     private void initializeProducts() {
-        if (productRepository.count() == 0) {
+        long count = productRepository.count();
+        log.info("현재 제품 수: {}", count);
+        
+        if (count == 0) {
+            log.info("샘플 제품 데이터 생성 중...");
+            
             Product product1 = Product.builder()
                     .title("삼성 갤럭시 북4 프로 360")
                     .price(1890000)
@@ -29,6 +42,7 @@ public class DataInitializer implements CommandLineRunner {
                     .isNew(true)
                     .category("electronics")
                     .build();
+            
             Product product2 = Product.builder()
                     .title("LG 그램 17인치 울트라북")
                     .price(2340000)
@@ -38,6 +52,7 @@ public class DataInitializer implements CommandLineRunner {
                     .isNew(true)
                     .category("electronics")
                     .build();
+            
             Product product3 = Product.builder()
                     .title("Apple MacBook Pro 14")
                     .price(2890000)
@@ -47,6 +62,7 @@ public class DataInitializer implements CommandLineRunner {
                     .isNew(false)
                     .category("electronics")
                     .build();
+            
             Product product4 = Product.builder()
                     .title("소니 WH-1000XM5 헤드폰")
                     .price(450000)
@@ -56,11 +72,15 @@ public class DataInitializer implements CommandLineRunner {
                     .isNew(false)
                     .category("electronics")
                     .build();
+            
             productRepository.save(product1);
             productRepository.save(product2);
             productRepository.save(product3);
             productRepository.save(product4);
+            
+            log.info("샘플 제품 {} 개 생성 완료!", 4);
+        } else {
+            log.info("기존 제품 데이터가 존재하므로 초기화를 건너뜁니다.");
         }
     }
-    
 }
